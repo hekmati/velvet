@@ -1,6 +1,14 @@
 {
-  "extends": "./tsconfig.json",
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "module": "commonjs"
-  }
+    "rootDir": "src",
+    "outDir": "lib"
+  },
+  "exclude": [
+    "config-overrides.js",
+    "lib",
+    "build",
+    "**/stories",
+    "**/*.test.tsx"
+  ]
 }

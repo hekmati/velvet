@@ -3,14 +3,22 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@types/react-redux": "^6.0.9",
-    "@types/react-router-redux": "^5.0.16",
+    "@types/react-router": "^4.0.32",
     "antd": "^3.10.1",
+    "eslint": "^5.7.0",
+    "history": "^4.7.2",
+    "lodash": "^4.17.11",
+    "node-uuid": "^1.4.8",
+    "prettier": "^1.14.3",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
     "react-redux": "^5.0.7",
-    "react-router-redux": "^4.0.8",
+    "react-router": "^4.3.1",
+    "react-router-redux": "^5.0.0-alpha.9",
     "react-scripts-ts": "3.1.0",
+    "redux-devtools-extension": "^2.13.5",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.3.0",
     "styled-components": "^3.4.10",
     "url-pattern": "^1.0.3"
   },
@@ -21,10 +29,18 @@
     "eject": "react-scripts-ts eject"
   },
   "devDependencies": {
+    "@types/history": "^4.7.2",
     "@types/jest": "^23.3.5",
+    "@types/lodash": "^4.14.117",
     "@types/node": "^10.11.7",
+    "@types/node-uuid": "^0.0.28",
     "@types/react": "^16.4.16",
     "@types/react-dom": "^16.0.9",
+    "@types/react-redux": "^6.0.9",
+    "@types/react-router-redux": "^5.0.16",
+    "@types/redux-devtools-extension": "^2.13.2",
+    "@types/redux-logger": "^3.0.6",
+    "@types/redux-thunk": "^2.1.0",
     "typescript": "^3.1.3"
   }
 }

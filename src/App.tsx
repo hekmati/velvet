@@ -1,44 +1,40 @@
-import { Layout, Menu } from 'antd';
+import { Layout } from 'antd';
 import 'antd/dist/antd.css';
-// import { URLSync } from './urlSync/urlSync'
 import * as React from 'react';
-import styled from 'styled-components';
+import { connect } from 'react-redux';
+import { Navbar } from './components/Navbar';
+import { URLSync } from './components/urlSync';
 
-const { Content, Header } = Layout;
-
-const VelvetTitle = styled.div`
-  width: 100px;
-  float: left;
-  text-align: center;  
-  color: white;
-  font-size: 20px;
-  font-weight: 700;
-`;
+const { Content } = Layout;
 
 
-class App extends React.Component {
-  public render() {
-    return (
-      <Layout>
-        {/*<URLSync/>*/}
-        <Header>
-          <VelvetTitle>Velvet</VelvetTitle>
-          <Menu
-            theme="dark"
-            mode="horizontal"
-            defaultSelectedKeys={['songs']}
-            style={{ lineHeight: '64px' }}
-          >
-            <Menu.Item key="songs">Songs</Menu.Item>
-            <Menu.Item key="playlists">Playlists</Menu.Item>
-          </Menu>
-        </Header>
-        <Content style={{ padding: '0 50px' }}>
-          {/*<div style={{ padding: 24, minHeight: 280 }}>Content</div>*/}
-        </Content>
-      </Layout>
-    );
-  }
-}
+// interface StateProps {
+//   // viewport: string;
+// }
 
-export default App;
+// interface DispatchProps {
+//   // setViewport: (viewport: string) => void;
+// }
+
+// type Props = StateProps & DispatchProps;
+
+const VelvetApp = () => {
+  return (
+    <Layout>
+      <URLSync/>
+      <Navbar />
+      <Content style={{ padding: '0 50px' }}>
+        <div style={{ padding: 24, minHeight: 280 }}>Contento Mui Lindo</div>
+      </Content>
+    </Layout>
+  );
+};
+
+// const mapStateToProps = state => {
+//   return {
+//     viewport: getViewport(state.viewport),
+//   };
+// };
+
+const ConnectedVelvetApp = connect()(VelvetApp);
+export { ConnectedVelvetApp as VelvetApp }
