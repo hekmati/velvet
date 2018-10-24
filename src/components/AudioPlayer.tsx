@@ -11,7 +11,7 @@ const AudioPlayerContainer = styled.div`
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  height: 90vh;
+  height: 93vh;
 `;
 
 const StyledImage = styled.img`

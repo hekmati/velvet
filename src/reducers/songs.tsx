@@ -79,8 +79,3 @@ export const getSongs = state => _.map(state.songs.idsInOrder, id => state.songs
 export const getIsLoadingSongs = state => state.songs.isLoading;
 
 export const getCurrentSong = state => state.songs.currentSong;
-//
-// export const getCurrentMachine = state => {
-//   const currentMachineId = state.currentMachine.id;
-//   return currentMachineId !== null ? state.machines.byId[currentMachineId] : null;
-// };

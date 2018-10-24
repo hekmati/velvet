@@ -6,17 +6,15 @@ import styled from 'styled-components';
 import { selectSong as selectSongAction } from '../actionCreators/songs';
 import { loadSongs as loadSongsAction } from '../actions/songs';
 import { Song } from '../constants/types';
-import { getSongs, getSongsState } from '../reducers/songs';
+import { getSongsState } from '../reducers/songs';
 import { AudioPlayer } from './AudioPlayer';
 const { Content, Sider } = Layout;
 
 const StyledLayout = styled(Layout)`
-  height: 90vh;
-  margin-top: 10px;
+  height: 93vh;
 `;
 
 type StateProps = {
-  songs: Song[];
   isLoaded: boolean;
   isLoading: boolean;
   errorMessage: string;
@@ -29,7 +27,9 @@ type DispatchProps = {
   selectSong: (songId: string) => void;
 };
 
-type OwnProps = {};
+type OwnProps = {
+  songs: Song[];
+};
 type Props = StateProps & DispatchProps & OwnProps;
 
 const Songs = ({ isLoaded, isLoading, songs, currentSongId, currentSong, loadSongs, selectSong }: Props) => {
@@ -47,7 +47,7 @@ const Songs = ({ isLoaded, isLoading, songs, currentSongId, currentSong, loadSon
         <Menu selectedKeys={[currentSongId]} onSelect={onSelect}>
           {songs.map(song => (
             <Menu.Item key={song.id}>
-              <Icon type="music" theme="outlined" />
+              <Icon type="customer-service" theme="outlined" />
               <strong>{song.name.replace('.mp3', '')}</strong>
               <span> - {song.artist}</span>
             </Menu.Item>
@@ -62,7 +62,6 @@ const Songs = ({ isLoaded, isLoading, songs, currentSongId, currentSong, loadSon
 const mapStateToProps = state => {
   const { isLoaded, isLoading, errorMessage, currentSong, currentSongId } = getSongsState(state);
   return {
-    songs: getSongs(state),
     isLoaded,
     isLoading,
     errorMessage,
