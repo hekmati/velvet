@@ -10,4 +10,4 @@ export const viewport = (state = viewports.SONGS, action) => {
   }
 };
 
-export const getViewport = state => state;
+export const getViewport = state => state.viewport;

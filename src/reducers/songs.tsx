@@ -8,6 +8,8 @@ export const songs = (
     isLoading: false,
     isLoaded: false,
     errorMessage: null,
+    currentSong: null,
+    currentSongId: null,
   },
   action,
 ) => {
@@ -18,30 +20,65 @@ export const songs = (
         isLoading: true,
         isLoaded: false,
         errorMessage: null,
+        currentSong: null,
+        currentSongId: null,
       };
     case actionTypes.LOAD_SONGS_SUCCESS:
       return {
         ...state,
-        idsInOrder: _.map(action.response.songs, 'id'),
+        idsInOrder: _.map(action.response, 'id'),
         byId: _.fromPairs(
-          action.response.songs.map(song => {
-            return [song.id, { ...song, updatingFields: {} }];
+          action.response.map(song => {
+            return [song.id, { ...song }];
           }),
         ),
         isLoading: false,
         isLoaded: true,
         errorMessage: null,
+        currentSong: null,
+        currentSongId: null,
+      };
+    case actionTypes.SELECT_SONG:
+      return {
+        ...state,
+        currentSong: state.byId[action.id],
+        currentSongId: action.id,
+      };
+    case actionTypes.PREV_SONG:
+      if (!state.currentSongId) {
+        return state;
+      }
+      const prevSongIndex =
+        (state.idsInOrder.indexOf(state.currentSongId) - 1 + state.idsInOrder.length) % state.idsInOrder.length;
+      const prevSongId = state.idsInOrder[prevSongIndex];
+      return {
+        ...state,
+        currentSong: state.byId[prevSongId],
+        currentSongId: prevSongId,
+      };
+    case actionTypes.NEXT_SONG:
+      if (!state.currentSongId) {
+        return state;
+      }
+      const nextSongIndex = (state.idsInOrder.indexOf(state.currentSongId) + 1) % state.idsInOrder.length;
+      const nextSongId = state.idsInOrder[nextSongIndex];
+      return {
+        ...state,
+        currentSong: state.byId[nextSongId],
+        currentSongId: nextSongId,
       };
     default:
       return state;
   }
 };
 
-// export const getMachinesState = state => state.machines;
-//
-// export const getMachines = state => _.map(state.machines.idsInOrder, id => state.machines.byId[id]);
-//
-// export const getCurrentMachineId = state => state.currentMachine.id;
+export const getSongsState = state => state.songs;
+
+export const getSongs = state => _.map(state.songs.idsInOrder, id => state.songs.byId[id]);
+
+export const getIsLoadingSongs = state => state.songs.isLoading;
+
+export const getCurrentSong = state => state.songs.currentSong;
 //
 // export const getCurrentMachine = state => {
 //   const currentMachineId = state.currentMachine.id;

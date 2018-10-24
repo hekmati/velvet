@@ -18,15 +18,17 @@ const Title = styled.div`
   font-weight: 700;
 `;
 
-interface StateProps {
+type StateProps = {
   viewport: string;
 }
 
-interface DispatchProps {
+type DispatchProps = {
   setViewport: (viewport: string) => void;
 }
 
-type Props = StateProps & DispatchProps;
+type OwnProps = {};
+
+type Props = StateProps & DispatchProps & OwnProps;
 
 const Navbar = ({ viewport, setViewport }: Props) => {
   const onMenuClick = ({ key }) => {
@@ -52,11 +54,11 @@ const Navbar = ({ viewport, setViewport }: Props) => {
 
 const mapStateToProps = state => {
   return {
-    viewport: getViewport(state.viewport),
+    viewport: getViewport(state),
   };
 };
 
-const ConnectedNavbar = connect<StateProps, DispatchProps>(
+const ConnectedNavbar = connect<StateProps, DispatchProps, OwnProps>(
   mapStateToProps,
   { setViewport: setViewportAction },
 )(Navbar);

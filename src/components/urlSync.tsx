@@ -118,8 +118,8 @@ class URLSync extends React.Component<Props> {
   }
 }
 
-const mapStateToProps = (state: any) => {
-  const viewport = getViewport(state.viewport);
+const mapStateToProps = (state) => {
+  const viewport = getViewport(state);
   const location = getLocation(state);
 
   return {
