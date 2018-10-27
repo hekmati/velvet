@@ -108,6 +108,7 @@ class Playlists extends React.Component<Props, State> {
   selectEditedPlaylist = (event, playlistId: string) => {
     const { selectPlaylistForEdit } = this.props;
     event.preventDefault();
+    event.stopPropagation();
     selectPlaylistForEdit(playlistId);
     this.showModal();
   };

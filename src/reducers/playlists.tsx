@@ -83,3 +83,5 @@ export const getPlaylistsState = state => state.playlists;
 export const getPlaylists = state => _.map(state.playlists.idsInOrder, id => state.playlists.byId[id]);
 
 export const getIsLoadingPlaylists = state => state.playlists.isLoading;
+
+export const getCurrentPlaylist = state => state.playlists.currentPlaylist;

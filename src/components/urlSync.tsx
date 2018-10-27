@@ -2,15 +2,13 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { push as pushAction } from 'react-router-redux';
 import * as UrlPattern from 'url-pattern';
-// import * as viewports from './constants/viewports';
-// import { showMachine as showMachineAction } from '../../actionCreators/machines';
-// import { showOperation as showOperationAction } from '../../actionCreators/operations';
-// import { showTag as showTagAction } from '../../actionCreators/tags';
+import { selectPlaylist as selectPlaylistAction } from '../actionCreators/playlists';
+import { selectSong as selectSongAction } from '../actionCreators/songs';
 import { setViewport as setViewportAction } from '../actionCreators/viewport';
-// import { getCurrentMachineId } from '../../reducers/machines';
-// import { getCurrentOperationId } from '../../reducers/operations';
+import * as viewports from '../constants/viewports';
+import { getCurrentPlaylist } from '../reducers/playlists';
 import { getLocation } from '../reducers/rootReducer';
-// import { getCurrentTagName } from '../../reducers/tags';
+import { getCurrentSong } from '../reducers/songs';
 import { getViewport } from '../reducers/viewport';
 
 const VIEWPORT_ONLY_URL = new UrlPattern('/:viewport');
@@ -18,9 +16,8 @@ const VIEWPORT_WITH_OBJECT_ID_URL = new UrlPattern('/:viewport/:objectId');
 
 type StateProps = {
   viewport: string | null;
-  // currentMachineId: string | null;
-  // currentTagId: string | null;
-  // currentOperationId: string | null;
+  currentSongId: string | null;
+  currentPlaylistId: string | null;
   location: {
     pathname: string;
   };
@@ -29,16 +26,15 @@ type StateProps = {
 type DispatchProps = {
   push: (url: string) => void;
   setViewport: (viewport: string) => void;
-  // showTag: (objectId: string) => void;
-  // showMachine: (objectId: string) => void;
-  // showOperation: (objectId: string) => void;
+  selectSong: (objectId: string) => void;
+  selectPlaylist: (objectId: string) => void;
 };
 
 type Props = StateProps & DispatchProps;
 
 class URLSync extends React.Component<Props> {
   updateStateFromUrl = () => {
-    const { location, setViewport } = this.props;
+    const { location, setViewport, selectPlaylist, selectSong } = this.props;
     let matchResult;
     const locationPathname = encodeURI(location.pathname);
 
@@ -46,11 +42,11 @@ class URLSync extends React.Component<Props> {
 
     if (matchResult !== null) {
       setViewport(matchResult.viewport);
-      // if (matchResult.viewport === viewports.SONGS) {
-      //   showMachine(decodeURI(matchResult.objectId));
-      // } else if (matchResult.viewport === viewports.PLAYLISTS) {
-      //   showTag(decodeURI(matchResult.objectId));
-      // }
+      if (matchResult.viewport === viewports.SONGS) {
+        selectSong(decodeURI(matchResult.objectId));
+      } else if (matchResult.viewport === viewports.PLAYLISTS) {
+        selectPlaylist(decodeURI(matchResult.objectId));
+      }
       return;
     }
 
@@ -66,17 +62,14 @@ class URLSync extends React.Component<Props> {
   };
 
   updateUrlFromState = () => {
-    const { viewport, location, push } = this.props;
+    const { viewport, location, push, currentSongId, currentPlaylistId } = this.props;
     let expectedUrl;
 
-    // if (viewport && currentMachineId) {
-    //   expectedUrl = VIEWPORT_WITH_OBJECT_ID_URL.stringify({ viewport, objectId: currentMachineId });
-    // } else if (viewport && currentTagId) {
-    //   expectedUrl = VIEWPORT_WITH_OBJECT_ID_URL.stringify({ viewport, objectId: currentTagId });
-    // } else if (viewport && currentOperationId) {
-    //   expectedUrl = VIEWPORT_WITH_OBJECT_ID_URL.stringify({ viewport, objectId: currentOperationId });
-    // } else
-    if (viewport) {
+    if (viewport === viewports.SONGS && currentSongId) {
+      expectedUrl = VIEWPORT_WITH_OBJECT_ID_URL.stringify({ viewport, objectId: currentSongId });
+    } else if (viewport === viewports.PLAYLISTS && currentPlaylistId) {
+      expectedUrl = VIEWPORT_WITH_OBJECT_ID_URL.stringify({ viewport, objectId: currentPlaylistId });
+    } else if (viewport) {
       expectedUrl = VIEWPORT_ONLY_URL.stringify({ viewport });
     } else {
       throw new Error(`Invalid state was provided ${JSON.stringify(this.props)}, URL cannot be computed`);
@@ -118,13 +111,19 @@ class URLSync extends React.Component<Props> {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   const viewport = getViewport(state);
   const location = getLocation(state);
+  const currentSong = getCurrentSong(state);
+  const currentPlaylist = getCurrentPlaylist(state);
+  const currentSongId = currentSong ? currentSong.id : null;
+  const currentPlaylistId = currentPlaylist ? currentPlaylist.id : null;
 
   return {
     viewport,
     location,
+    currentSongId,
+    currentPlaylistId,
   };
 };
 
@@ -132,6 +131,8 @@ const ConnectedURLSync = connect<StateProps, DispatchProps>(
   mapStateToProps,
   {
     push: pushAction,
+    selectPlaylist: selectPlaylistAction,
+    selectSong: selectSongAction,
     setViewport: setViewportAction,
   },
 )(URLSync);

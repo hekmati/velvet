@@ -23,13 +23,3 @@ const render = () =>
 
 // We first render the application
 render();
-
-// if (process.env.NODE_ENV !== 'production') {
-//   // If webpacks HMR detects a change in the VelvetApp, we reload it
-//   const moduleAsAny = module as any;
-//   if (moduleAsAny.hot) {
-//     moduleAsAny.hot.accept('./App', () => {
-//       render();
-//     });
-//   }
-// }
