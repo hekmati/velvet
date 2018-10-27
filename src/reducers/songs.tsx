@@ -79,3 +79,5 @@ export const getSongs = state => _.map(state.songs.idsInOrder, id => state.songs
 export const getIsLoadingSongs = state => state.songs.isLoading;
 
 export const getCurrentSong = state => state.songs.currentSong;
+
+export const getSongsByIds = state => state.songs.byId;

@@ -10,6 +10,8 @@ export const playlists = (
     errorMessage: null,
     currentPlaylist: null,
     currentPlaylistId: null,
+    editedPlaylist: null,
+    editedPlaylistId: null,
   },
   action,
 ) => {
@@ -44,6 +46,33 @@ export const playlists = (
         currentPlaylist: state.byId[action.id],
         currentPlaylistId: action.id,
       };
+    case actionTypes.SELECT_PLAYLIST_FOR_EDIT:
+      if (!action.id) {
+        // Happens when the user adds a new playlist after editing an existent one
+        return {
+        ...state,
+        editedPlaylist: null,
+        editedPlaylistId: null,
+      };
+      }
+      return {
+        ...state,
+        editedPlaylist: state.byId[action.id],
+        editedPlaylistId: action.id,
+      };
+    case actionTypes.ADD_PLAYLIST_SUCCESS:
+      return {
+        ...state,
+        idsInOrder: [...state.idsInOrder, action.response.id],
+        byId: { ...state.byId, [action.response.id]: { ...action.response } },
+      };
+
+    case actionTypes.EDIT_PLAYLIST_SUCCESS:
+      return {
+        ...state,
+        byId: { ...state.byId, [action.response.id]: { ...action.response } },
+      };
+
     default:
       return state;
   }
@@ -54,5 +83,3 @@ export const getPlaylistsState = state => state.playlists;
 export const getPlaylists = state => _.map(state.playlists.idsInOrder, id => state.playlists.byId[id]);
 
 export const getIsLoadingPlaylists = state => state.playlists.isLoading;
-
-export const getCurrentPlaylist = state => state.playlists.currentPlaylist;

@@ -15,9 +15,3 @@ export const loadSongs = () => (dispatch, getState) => {
     },
   );
 };
-
-// export const selectSongAction = (songId) => (dispatch) => {
-//   dispatch(selectSong(songId));
-// };
-
-

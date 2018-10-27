@@ -1,4 +1,5 @@
 import { v4 } from 'node-uuid';
+import { Playlist } from './constants/types';
 
 // This is a fake in-memory implementation of something
 // that would be implemented by calling a REST server.
@@ -39,7 +40,7 @@ const fakeDatabase = {
   playlists: [
     {
       id: v4(),
-      name: 'Work Playlist',
+      name: 'Work',
       songs: [
         {
           id: BEAT_ID,
@@ -58,7 +59,7 @@ const fakeDatabase = {
     },
     {
       id: v4(),
-      name: 'Home Playlist',
+      name: 'Home',
       songs: [
         {
           id: NOW_ID,
@@ -88,4 +89,22 @@ export const loadSongs = () =>
 export const loadPlaylists = () =>
   delay(300).then(() => {
     return fakeDatabase.playlists;
+  });
+
+
+export const addPlaylist = (playlist: Playlist) =>
+  delay(300).then(() => {
+    fakeDatabase.playlists.push(playlist);
+    return playlist;
+  });
+
+export const editPlaylist = (editedPlaylist: Playlist) =>
+  delay(300).then(() => {
+    fakeDatabase.playlists.forEach( (playlist: Playlist) => {
+      if (playlist.id === editedPlaylist.id) {
+        playlist.name = editedPlaylist.name;
+        playlist.songs = [...editedPlaylist.songs];
+      }
+    });
+    return editedPlaylist;
   });
