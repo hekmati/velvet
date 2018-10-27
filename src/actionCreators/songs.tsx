@@ -1,5 +1,4 @@
 import * as actionTypes from '../constants/actionTypes';
-import { Song } from '../constants/types';
 
 
 export const loadSongsRequest = () => ({
@@ -23,14 +22,14 @@ export const selectSong = (id) => ({
   id,
 });
 
-export const prevSong = (songs: Song[]) => ({
+export const prevSong = (songsIds: string[]) => ({
   type: actionTypes.PREV_SONG,
-  songs,
+  songsIds,
 });
 
-export const nextSong = (songs: Song[]) => ({
+export const nextSong = (songsIds: string[]) => ({
   type: actionTypes.NEXT_SONG,
-  songs,
+  songsIds,
 });
 
 

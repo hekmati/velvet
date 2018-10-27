@@ -26,8 +26,8 @@ const StyledIcon = styled(Icon)`
 
 
 type DispatchProps = {
-  prevSong: (songs: Song[]) => void;
-  nextSong: (songs: Song[]) => void;
+  prevSong: (songs: string[]) => void;
+  nextSong: (songs: string[]) => void;
 };
 
 type StateProps = {
@@ -35,18 +35,18 @@ type StateProps = {
 };
 
 type OwnProps = {
-  songs: Song[];
+  songsIds: string[];
 };
 
 type Props = StateProps & DispatchProps & OwnProps;
 
-const AudioPlayer = ({ currentSong, nextSong, prevSong, songs }: Props) => {
+const AudioPlayer = ({ currentSong, nextSong, prevSong, songsIds }: Props) => {
   const onClickPrev = () => {
-    prevSong(songs);
+    prevSong(songsIds);
   };
 
   const onClickNext = () => {
-    nextSong(songs);
+    nextSong(songsIds);
   };
 
   return (
