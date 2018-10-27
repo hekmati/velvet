@@ -54,7 +54,7 @@ const Songs = ({ isLoaded, isLoading, songs, currentSongId, currentSong, loadSon
           ))}
         </Menu>
       </Sider>
-      <Content>{currentSong && <AudioPlayer />}</Content>
+      <Content>{currentSong && <AudioPlayer songs={songs}/>}</Content>
     </StyledLayout>
   );
 };

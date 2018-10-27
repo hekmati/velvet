@@ -26,25 +26,27 @@ const StyledIcon = styled(Icon)`
 
 
 type DispatchProps = {
-  prevSong: () => void;
-  nextSong: () => void;
+  prevSong: (songs: Song[]) => void;
+  nextSong: (songs: Song[]) => void;
 };
 
 type StateProps = {
   currentSong: Song;
 };
 
-type OwnProps = {};
+type OwnProps = {
+  songs: Song[];
+};
 
 type Props = StateProps & DispatchProps & OwnProps;
 
-const AudioPlayer = ({ currentSong, nextSong, prevSong }: Props) => {
+const AudioPlayer = ({ currentSong, nextSong, prevSong, songs }: Props) => {
   const onClickPrev = () => {
-    prevSong();
+    prevSong(songs);
   };
 
   const onClickNext = () => {
-    nextSong();
+    nextSong(songs);
   };
 
   return (

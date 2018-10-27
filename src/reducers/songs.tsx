@@ -45,23 +45,19 @@ export const songs = (
         currentSongId: action.id,
       };
     case actionTypes.PREV_SONG:
-      if (!state.currentSongId) {
-        return state;
-      }
+      let currentSongIds = action.songs.map(song => song.id);
       const prevSongIndex =
-        (state.idsInOrder.indexOf(state.currentSongId) - 1 + state.idsInOrder.length) % state.idsInOrder.length;
-      const prevSongId = state.idsInOrder[prevSongIndex];
+        (currentSongIds.indexOf(state.currentSongId) - 1 + action.songs.length) % action.songs.length;
+      const prevSongId = currentSongIds[prevSongIndex];
       return {
         ...state,
         currentSong: state.byId[prevSongId],
         currentSongId: prevSongId,
       };
     case actionTypes.NEXT_SONG:
-      if (!state.currentSongId) {
-        return state;
-      }
-      const nextSongIndex = (state.idsInOrder.indexOf(state.currentSongId) + 1) % state.idsInOrder.length;
-      const nextSongId = state.idsInOrder[nextSongIndex];
+      currentSongIds = action.songs.map(song => song.id);
+      const nextSongIndex = (currentSongIds.indexOf(state.currentSongId) + 1) % action.songs.length;
+      const nextSongId = currentSongIds[nextSongIndex];
       return {
         ...state,
         currentSong: state.byId[nextSongId],
