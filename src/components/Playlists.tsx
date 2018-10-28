@@ -1,4 +1,4 @@
-import { Button, Form, Icon, Layout, Menu } from 'antd';
+import { Form, Layout } from 'antd';
 import 'antd/dist/antd.css';
 import { WrappedFormUtils } from 'antd/es/form/Form';
 import { v4 } from 'node-uuid';
@@ -16,21 +16,12 @@ import {
 } from '../actions/playlists';
 import { loadSongs as loadSongsAction } from '../actions/songs';
 import { Playlist, Song } from '../constants/types';
-import { getPlaylists, getPlaylistsState } from '../reducers/playlists';
+import { getPlaylistsState } from '../reducers/playlists';
 import { getSongs, getSongsByIds } from '../reducers/songs';
 import { AddOrEditPlaylistModal } from './AddOrEditPlaylistModal';
 import { Songs } from './Songs';
-const { Content, Sider } = Layout;
-
-const MenuHeader = styled.h3`
-  padding-top: 15px;
-  color: white;
-  margin-left: 14px;
-  margin-right: 15px;
-  font-weight: 700;
-  display: flex
-  justify-content: space-between
-`;
+const { Content } = Layout;
+import { PlaylistsMenu } from './PlaylistsMenu';
 
 const StyledLayout = styled(Layout)`
   height: 93vh;
@@ -39,12 +30,9 @@ const StyledLayout = styled(Layout)`
 type StateProps = {
   songs: Song[];
   songsById: { [songId: string]: Song };
-  playlists: Playlist[];
   isLoaded: boolean;
   isLoading: boolean;
-  errorMessage: string;
   currentPlaylist: Playlist;
-  currentPlaylistId: string;
   editedPlaylist: Playlist;
 };
 
@@ -57,8 +45,8 @@ type DispatchProps = {
   editPlaylist: (playlist: Playlist) => void;
 };
 
-type OwnProps = {};
-type Props = StateProps & DispatchProps & OwnProps;
+
+type Props = StateProps & DispatchProps;
 
 type State = {
   modalVisible: boolean;
@@ -69,18 +57,6 @@ class Playlists extends React.Component<Props, State> {
 
   state = {
     modalVisible: false,
-  };
-
-  componentDidMount() {
-    const { isLoaded, isLoading, loadPlaylists, loadSongs } = this.props;
-    if (!isLoaded && !isLoading) {
-      loadPlaylists();
-      loadSongs();
-    }
-  }
-
-  onSelect = ({ key }) => {
-    this.props.selectPlaylist(key);
   };
 
   showModal = () => {
@@ -105,19 +81,6 @@ class Playlists extends React.Component<Props, State> {
     }
   };
 
-  selectEditedPlaylist = (event, playlistId: string) => {
-    const { selectPlaylistForEdit } = this.props;
-    event.preventDefault();
-    event.stopPropagation();
-    selectPlaylistForEdit(playlistId);
-    this.showModal();
-  };
-
-  addNewPlaylist = () => {
-    const { selectPlaylistForEdit } = this.props;
-    selectPlaylistForEdit(null);
-    this.showModal();
-  };
 
   addOrEditPlaylist = () => {
     const form = this.form;
@@ -141,36 +104,11 @@ class Playlists extends React.Component<Props, State> {
   };
 
   render() {
-    const { currentPlaylist, currentPlaylistId, editedPlaylist, playlists, songs } = this.props;
+    const { currentPlaylist, editedPlaylist, songs } = this.props;
 
     return (
       <StyledLayout>
-        <Sider width="20%">
-          <MenuHeader>
-            Playlists
-            <Button type="primary" shape="circle" icon="plus" size="small" onClick={this.addNewPlaylist} />
-          </MenuHeader>
-          <Menu theme="dark" selectedKeys={[currentPlaylistId]} onSelect={this.onSelect}>
-            {playlists.map(playlist => (
-              <Menu.Item key={playlist.id} style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <div>
-                  <Icon type="profile" theme="outlined" />
-                  <strong>{playlist.name}</strong>
-                </div>
-                <Button
-                  shape="circle"
-                  icon="edit"
-                  size="small"
-                  onClick={event => this.selectEditedPlaylist(event, playlist.id)}
-                  style={{
-                    marginTop: '7px',
-                    paddingLeft: '3px',
-                  }}
-                />
-              </Menu.Item>
-            ))}
-          </Menu>
-        </Sider>
+        <PlaylistsMenu showModal={this.showModal}/>
         <Content>{currentPlaylist && <Songs songs={currentPlaylist.songs} />}</Content>
         <AddOrEditPlaylistModal
           allSongs={songs}
@@ -186,23 +124,20 @@ class Playlists extends React.Component<Props, State> {
 }
 
 const mapStateToProps = state => {
-  const { isLoaded, isLoading, errorMessage, currentPlaylist, currentPlaylistId, editedPlaylist } = getPlaylistsState(
+  const { isLoaded, isLoading, currentPlaylist, editedPlaylist } = getPlaylistsState(
     state,
   );
   return {
     songs: getSongs(state),
     songsById: getSongsByIds(state),
-    playlists: getPlaylists(state),
     isLoaded,
     isLoading,
-    errorMessage,
     currentPlaylist,
-    currentPlaylistId,
     editedPlaylist,
   };
 };
 
-const ConnectedPlaylists = connect<StateProps, DispatchProps, OwnProps>(
+const ConnectedPlaylists = connect<StateProps, DispatchProps>(
   mapStateToProps,
   {
     loadPlaylists: loadPlaylistsAction,
